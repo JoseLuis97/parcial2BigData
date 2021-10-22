@@ -68,7 +68,6 @@ def handler(event, context):
     a = str(str(str(str(row.find('h4')).split('<')).split('>')).split(',')[4]).replace('"','').replace("'","")
     b = str(str(str(row.find('h2')).split('<')).split('>')[4]).replace('"','').replace("'","").replace(', /a','')
     c = "https://www.elespectador.com"+str(str(str(row.find('h2')).split('href=')[1]).split('rel=')[0]).replace('"','')
-    print(b)
     elespectadorCSV = elespectadorCSV+'{}; {}; {} \n'.format(a,b,c)
    except:
     pass
