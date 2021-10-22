@@ -1,0 +1,22 @@
+{
+    "dev": {
+        "app_function": "scraping.handler",
+        "aws_region": "us-east-1",
+        "profile_name": "default",
+        "project_name": "lambda",
+        "runtime": "python3.8",
+        "s3_bucket": "zappa-qetdcud5l",
+	"keep_warm": false,
+	"apigateway_enabled": false,
+	"events": [{
+            "function": "scraping.handler",
+            "event_source": {
+                  "arn":  "arn:aws:s3:::bucketparcialbd",
+                  "key_filters":[{"type":"prefix", "value":"headlines/raw/"},{"type":"suffix", "value":".html"}],
+                  "events": [
+                    "s3:ObjectCreated:*" 
+                  ]
+               }
+            }]
+    }
+}
