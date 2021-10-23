@@ -17,6 +17,17 @@
                     "s3:ObjectCreated:*" 
                   ]
                }
-            }]
+            },
+            {
+              "function": "scraping.partitions",
+              "event_source": {
+                    "arn":  "arn:aws:s3:::scrappingbd",
+                    "key_filters":[{"type":"prefix", "value":"headlines/final/"},{"type":"suffix", "value":".csv"}],
+                    "events": [
+                      "s3:ObjectCreated:*" 
+                    ]
+                 }
+              }
+          ]
     }
 }

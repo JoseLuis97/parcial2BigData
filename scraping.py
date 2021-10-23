@@ -84,3 +84,17 @@ def handler(event, context):
  #Subida del archivo 
  s3.upload_file('/tmp/eltiempo.txt', bucketName, upload_path_eltiempo)
  s3.upload_file('/tmp/elespectador.txt', bucketName, upload_path_elespectador)
+
+def partitions(event, context):
+    client = boto3.client('athena')
+    response = client.start_query_execution(
+        QueryString='msck repair table final',
+        QueryExecutionContext={
+            'Database': 'noticias',
+        },
+         ResultConfiguration={
+        'OutputLocation': 's3://pruebaslambda123/',
+        
+        },
+      WorkGroup='primary'
+    )
