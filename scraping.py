@@ -44,10 +44,13 @@ def handler(event, context):
  eltiempoCSV='{}; {}; {} \n'.format('categoria','titulo','link')
 
  for row in articleET:
-   a = str(str(str(str(row.find_all('a', attrs={'class':'category'})).split('<')).split('>')).split(',')[2]).replace('"','').replace("'","")
-   b = str(str(str(row.find_all('a', attrs={'class':'title'})).split('<')).split('>')[1]).replace('"','').replace("'","").replace(', /a','')
-   c = 'https://www.eltiempo.com'+str(row.find_all('a', attrs={'class':'title'})).split('"')[3]
-   eltiempoCSV = eltiempoCSV+'{}; {}; {} \n'.format(a,b,c)
+   try:
+    a = str(str(str(str(row.find_all('a', attrs={'class':'category'})).split('<')).split('>')).split(',')[2]).replace('"','').replace("'","")
+    b = str(str(str(row.find_all('a', attrs={'class':'title'})).split('<')).split('>')[1]).replace('"','').replace("'","").replace(', /a','')
+    c = 'https://www.eltiempo.com'+str(row.find_all('a', attrs={'class':'title'})).split('"')[3]
+    eltiempoCSV = eltiempoCSV+'{}; {}; {} \n'.format(a,b,c)
+   except:
+    pass
 
  #Archivo resultante
  archivo=open('/tmp/eltiempo.txt','w', encoding='utf-8') 
@@ -85,6 +88,7 @@ def handler(event, context):
  s3.upload_file('/tmp/eltiempo.txt', bucketName, upload_path_eltiempo)
  s3.upload_file('/tmp/elespectador.txt', bucketName, upload_path_elespectador)
 
+#Actualizacion de las particiones de Athena
 def partitions(event, context):
     client = boto3.client('athena')
     response = client.start_query_execution(
