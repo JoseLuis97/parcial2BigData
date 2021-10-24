@@ -23,6 +23,7 @@ def handler(event, context):
  #Direccion
  key_eltiempo = download_path_eltiempo
  key_elespectador = download_path_elespectador
+
  #Nombre del bucket
  bucketName = 'bucketparcialbd'
  
@@ -34,7 +35,7 @@ def handler(event, context):
  s3.download_file(bucketName, key_eltiempo, download_path_eltiempo)
  s3.download_file(bucketName, key_elespectador, download_path_elespectador)
 
- #EL TIEMPO
+ #scraping el tiempo
  with open(download_path_eltiempo) as file:
    content = file.read()
    soupET = BeautifulSoup(content,'html.parser')
@@ -52,12 +53,12 @@ def handler(event, context):
    except:
     pass
 
- #Archivo resultante
+ #Archivo resultante del scaping del tiempo
  archivo=open('/tmp/eltiempo.txt','w', encoding='utf-8') 
  archivo.write(''+eltiempoCSV)
  archivo.close()
 
- #EL ESPECTADOR
+ #Scraping el espectador
  with open(download_path_elespectador) as file:
    content = file.read()
    soupES = BeautifulSoup(content,'html.parser')
@@ -70,12 +71,14 @@ def handler(event, context):
    try:
     a = str(str(str(str(row.find('h4')).split('<')).split('>')).split(',')[4]).replace('"','').replace("'","")
     b = str(str(str(row.find('h2')).split('<')).split('>')[4]).replace('"','').replace("'","").replace(', /a','')
+    if str(b) == ", /path":
+     b = str(str(str(row.find('h2')).split('<')).split('>')[14]).replace('"','').replace("'","").replace(', /a','')
     c = "https://www.elespectador.com"+str(str(str(row.find('h2')).split('href=')[1]).split('rel=')[0]).replace('"','')
     elespectadorCSV = elespectadorCSV+'{}; {}; {} \n'.format(a,b,c)
    except:
     pass
 
- #Archivo resultante
+ #Archivo resultante del espectador 
  archivo=open('/tmp/elespectador.txt','w', encoding='utf-8') 
  archivo.write(''+elespectadorCSV)
  archivo.close()
