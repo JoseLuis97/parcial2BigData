@@ -1,0 +1,22 @@
+{
+    "dev": {
+        "app_function": "bigdata.parcial",
+        "aws_region": "us-east-1",
+        "keep_warm": false,
+        "apigateway_enabled": false,
+        "profile_name": "default",
+        "project_name": "bd-parcial",
+        "runtime": "python3.9",
+        "s3_bucket": "parcialbigdata1028",
+    
+        "events": [{
+             "function": "bigdata.trigger",
+             "event_source": {
+                   "arn":  "arn:aws:s3:::parcialbigdata1028",
+                   "events": [
+                     "s3:ObjectCreated:*" 
+                         ]
+                     }
+                 }]
+    }
+}
